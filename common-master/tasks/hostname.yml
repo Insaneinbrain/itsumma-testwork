@@ -1,0 +1,6 @@
+---
+- name: Setting hostname...
+  hostname: name="{{ itsumma_host }}"
+
+- name: Adding hostname to /etc/hosts records...
+  template: src=hosts dest=/etc/hosts mode=0644 owner=root group=root backup=yes

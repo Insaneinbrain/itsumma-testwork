@@ -1,0 +1,53 @@
+---
+- name: Updating hosts info...
+  setup: filter='*'
+
+- name: Making ~/.itsumma helpers directory...
+  file: dest="{{ item }}" state=directory mode=0700
+  with_items:
+  - "~/.itsumma"
+  - "~/.itsumma/bin"
+  - "/etc/ansible/facts.d"
+- name: Copying ITSumma helpers...
+  template:
+    src: "itsumma/{{ item }}"
+    dest: "~/.itsumma/{{ item }}"
+  with_items:
+    - environment.inc
+    - bashrc.inc
+    - sessions.awk
+
+- name: Copying ITSumma bin/sh helpers...
+  template:
+    src: "itsumma/bin/{{ item }}"
+    dest: "~/.itsumma/bin/{{ item }}"
+    mode: 0700
+  with_items:
+    - motd.sh
+    - linux-raid.sh
+    - swap2ram.sh
+    - audit_system_users.py
+#  - add-ssh-chroot-user.py
+#  - swap-usage.sh
+#  - if-pps.sh
+#  - mysql-dump-db.sh
+#  - mysql-kill-selects.sh
+#  - mysql-dump-procs.sh
+#  - httpd-session-dirs-check.sh
+#  - nginx-openfiles.sh
+#  - nginx-top-ip.sh
+#  - ssh-access-audit.sh
+#  - proc-env.sh
+
+- name: Copying ansible facts.d helper...
+  template:
+    src: "itsumma.fact"
+    dest: "/etc/ansible/facts.d/itsumma.fact"
+    mode: 0700
+
+- name: Add include to ~/.bashrc ...
+  lineinfile:
+    dest: ~/.bashrc
+    state: present
+    regexp: '^source ~/.itsumma/bashrc.inc'
+    line: 'source ~/.itsumma/bashrc.inc'

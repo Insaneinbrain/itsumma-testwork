@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ -f /root/.itsumma/environment.inc ]; then
+    source /root/.itsumma/environment.inc;
+else
+    exit 1;
+fi
+
+echo -e "[host]
+project=${ITSUMMA_PROJECT}
+server_name=${ITSUMMA_HOST}
+server_uid=${ITSUMMA_SERVER_UID}
+"

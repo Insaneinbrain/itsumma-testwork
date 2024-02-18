@@ -1,0 +1,35 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: lxd
+lint:
+  name: yamllint
+platforms:
+  - name: centos-7
+    source:
+      type: image
+      mode: pull
+      alias: centos/7/amd64
+  - name: debian-stretch
+    source:
+      type: image
+      mode: pull
+      alias: debian/stretch/amd64
+  - name: ubuntu-bionic
+    source:
+      type: image
+      mode: pull
+      alias: ubuntu/bionic/amd64
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+    options:
+      x: ["ANSIBLE0010,ANSIBLE0012,ANSIBLE0013"]
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

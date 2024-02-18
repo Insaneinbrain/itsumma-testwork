@@ -1,0 +1,24 @@
+---
+- name: Install common utilites via yum...
+  yum: name={{ item }} state=present
+  with_items: "{{ common_utils_yum }}"
+  when: ansible_os_family == "RedHat"
+
+- name: Enable haveged...
+  service: name=haveged state=restarted enabled=yes
+  when: ansible_os_family == "RedHat" and ansible_virtualization_role == "guest"
+
+
+- name: Remove sysstat cron task...
+  file: state=absent dest=/etc/cron.d/sysstat
+  when: ansible_os_family == "RedHat"
+
+
+- name: Install common utilites via apt...
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    DEBIAN_PRIORITY: critical
+    DEBCONF_NONINTERACTIVE_SEEN: true
+  apt: name={{ item }} state=present
+  with_items: "{{ common_utils_apt }}"
+  when: ansible_os_family == "Debian"

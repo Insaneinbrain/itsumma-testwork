@@ -1,0 +1,17 @@
+---
+- name: Add ITSumma service user...
+  user: name=itsumma
+
+- name: Add ITSumma public keys user...
+  authorized_key: user=itsumma key="{{ item }}"
+  with_file:
+  - itsumma.pub
+  - itsumma_old.pub
+  tags: itsumma-keys
+
+- name: Add ITSumma user to sudoers...
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^itsumma'
+    line: 'itsumma ALL=(ALL) NOPASSWD: ALL'

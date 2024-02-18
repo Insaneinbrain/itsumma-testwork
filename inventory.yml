@@ -1,0 +1,8 @@
+all:
+  hosts:
+    robin:
+      ansible_host: 45.12.231.226
+      ansible_ssh_port: 22
+  vars:
+    project: "my_project"
+    itsumma_host: "test_host"

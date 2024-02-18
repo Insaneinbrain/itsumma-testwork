@@ -1,0 +1,15 @@
+pipeline {
+    agent { label 'lxc' }
+    options {
+        checkoutToSubdirectory('common')
+    }
+    stages {
+        stage('Test') {
+            steps {
+                dir('common') {
+                    sh 'molecule test'
+                }
+            }
+        }
+    }
+}

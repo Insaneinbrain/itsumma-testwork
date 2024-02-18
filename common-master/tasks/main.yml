@@ -1,0 +1,73 @@
+---
+- include: ansible.yml
+  tags:
+  - ansible
+
+- include: apparmor.yml
+  tags: apparmor.yml
+  when: ansible_os_family == "Debian"
+
+- include: selinux.yml
+  tags: selinux
+  when: ansible_distribution == "CentOS"
+
+- include: add-swap.yml
+  tags: add-swap
+  when: (ansible_virtualization_type is defined and ansible_virtualization_type != 'openvz') and add_swap_enabled
+
+- include: itsumma.yml
+  tags: itsumma
+
+- include: root-passord.yml
+  when: change_root | default(false)
+  tags: root-passord
+
+- name: Set grub-pc APT preseed values...
+  script: "grub-pc.preseed {{ GRUB_BOOT_DEVICE }}"
+  when: GRUB_BOOT_DEVICE is defined and (ansible_pkg_mgr == "apt")
+
+- include: upgrade-all.yml
+  when: update_all_pkgs | default(false)
+  tags: upgrade-all
+
+- include: utils.yml
+  tags: utils
+
+- include: ntpd.yml
+  tags:
+  - ntpd
+  - ntp
+
+  # Set hostname if it defined in "itsumma_host" variable ( in ./inventory file )
+- include: hostname.yml
+  when: itsumma_host | default(False)
+  tags: hostname
+
+#   # New in ansible version 2.2.0.
+# - name: Set timezone to Europe/Moscow...
+#   timezone: name=Europe/Moscow
+#   tags: timezone
+
+- include: ulimit.yml
+  tags: ulimit
+
+  # Install common.sysctl (by-default) as /etc/sysctl.conf and apply
+- include: sysctl.yml
+  tags: sysctl
+
+- name: Apply ~/.nanorc...
+  copy: src=nanorc dest="~/.nanorc"
+  tags: nanorc
+
+- include: firewall.yml
+  tags: firewall
+  when:
+  - ansible_distribution == "CentOS"
+
+# Install our helpers to ~/.itsumma if "project" variable defined ( in ./inventory file or ENV )
+- include: helpers.yml
+  when: project != ''
+  tags: helpers
+
+- meta: flush_handlers
+  tags: always

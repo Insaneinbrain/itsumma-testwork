@@ -1,0 +1,30 @@
+---
+- name: Installing EPEL repo...
+  yum: name=epel-release state=installed
+  when: ansible_distribution == "CentOS" or ansible_distribution == "Amazon"
+
+- name: Installing yum-utils repo...
+  yum: name=yum-utils state=installed
+  when: ansible_distribution == "CentOS" or ansible_distribution == "Amazon"
+
+- name: Enable EPEL repo by default...
+  command: yum-config-manager --enable epel
+  when: ansible_distribution == "CentOS" or ansible_distribution == "Amazon"
+
+- name: Instaling yum plugins...
+  yum: name=yum-axelget state=installed update_cache=yes
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
+
+- name: Installing Playbook YUM deps...
+  yum:
+    name:
+      - libselinux-python
+      - python-devel
+      - python-pip
+    state: installed
+    update_cache: true
+  when: ansible_distribution == "CentOS" or ansible_distribution == "Amazon"
+
+- name: Installing APT deps..
+  apt: name="sudo" state=present update_cache=yes
+  when: ansible_os_family == "Debian"

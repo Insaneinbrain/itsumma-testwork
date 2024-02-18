@@ -1,0 +1,26 @@
+---
+- name: Check swap
+  stat: path="{{ add_swap_path }}" get_checksum=no get_md5=no follow=yes mime=no
+  register: add_swap_path_stat
+
+- name: Create swapfile...
+  command: dd if=/dev/zero of={{ add_swap_path }} bs=1M count={{ add_swap_size }} creates={{ add_swap_path }}
+  register: write_swapfile
+  when: add_swap_path_stat.stat.exists == False
+
+- name: Set swapfile permissions...
+  file: path={{ add_swap_path }} mode=0600
+  when: add_swap_path_stat.stat.exists == False
+
+- name: Build swapfile...
+  command: mkswap {{ add_swap_path }}
+  register: create_swapfile
+  when: add_swap_path_stat.stat.exists == False
+
+- name: Add swapfile to /etc/fstab...
+  lineinfile: dest=/etc/fstab line="{{ add_swap_path }}   none    swap    sw    0   0" state=present
+  when: add_swap_path_stat.stat.exists == False
+
+- name: Enable swapfile...
+  command: swapon {{ add_swap_path }}
+  when: add_swap_path_stat.stat.exists == False

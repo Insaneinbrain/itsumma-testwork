@@ -1,0 +1,96 @@
+---
+add_swap_path: /swapfile1
+
+pkg_install_timeout: 1800
+pkg_install_retries: 222
+
+common_utils_yum:
+  - sudo
+  - lftp
+  - acpid
+  - atop
+  - autoconf
+  - automake
+  - bash-completion
+  - bc
+  - bind-utils
+  - curl
+  - dmidecode
+  - dstat
+  - ethtool
+  - fuse-sshfs
+  - gcc
+  - gcc-c++
+  - gdisk
+  - git
+  - git-core
+  - htop
+  - iftop
+  - iperf
+  # - ipmitool
+  - jq
+  - lsof
+  - make
+  - man
+  - mc
+  - nano
+  - nc
+  - ncdu
+  - net-tools
+  - ntp
+  - numactl
+  - pciutils
+  - pigz
+  - psmisc
+  - pv
+  - screen
+  # - smartmontools
+  - strace
+  - sysstat
+  - tcpdump
+  - telnet
+  - tmux
+  - usbutils
+  - vim
+  - wget
+  - jwhois
+  - yum-utils
+  - lsyncd
+  # - opendkim
+  - zlib-devel
+  - zlib
+  - haveged
+
+
+common_utils_apt:
+  - aptitude
+  - acpid  # for proper shutdown on KVM vms
+  - man
+  - vim
+  - atop
+  - htop
+  - iftop
+  - git
+  - wget
+  - curl
+  - sudo
+  - strace
+  - lsof
+  - net-tools
+  - bc
+  - screen
+  - ntp
+  - smartmontools
+  - ncdu
+  - dstat
+  - jq
+  - ipmitool
+  - nano
+  - tmux
+  - pigz
+  - pv
+  - lsyncd
+  - numactl
+  - make
+  - ethtool
+  - sudo

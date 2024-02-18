@@ -1,0 +1,4 @@
+- name: common master playbook
+  hosts: robin
+  roles:
+    - common-master

@@ -1,0 +1,9 @@
+---
+- name: Upgrading installed packages (APT)...
+  apt:
+    upgrade: dist
+  when: ansible_os_family == "Debian"
+
+- name: Upgrading installed packages (YUM)...
+  yum: name=* state=latest update_cache=yes update_only=yes
+  when: ansible_os_family == "RedHat"
